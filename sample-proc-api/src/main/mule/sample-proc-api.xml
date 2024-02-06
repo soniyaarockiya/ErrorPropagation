@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config"
+		doc:id="eb89c1da-2a98-456a-8e58-731b486808d1">
+		<http:listener-connection host="0.0.0.0"
+			port="8082" />
+	</http:listener-config>
+	<configuration doc:name="Configuration" doc:id="64c84f84-36ec-4fb9-b3c9-eb6616761360" defaultErrorHandler-ref="global_error_handlerError" />
+	<flow name="sample-proc-apiFlow"
+		doc:id="beca18c8-64fd-4107-9ef9-c640bd92a83b">
+		<http:listener doc:name="Listener"
+			doc:id="32a0519c-2070-414c-8a81-913609194d1d"
+			config-ref="HTTP_Listener_config" path="/papi">
+			<http:error-response>
+				<http:body><![CDATA[#[output application/json --- payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<!-- <raise-error doc:name="Raise error"
+			doc:id="6748fae6-59f8-4478-a863-139a17894b7a" type="SAMPLE:ABC_XYZ"
+			description="Some Error in PAPI" />
+		<raise-error doc:name="Raise error"
+			doc:id="a0a51ac2-cf02-424e-a793-9a3a3fa16913" type="XYZ_ABC:SAMPLE"
+			description="Something in papi" /> -->
+		<http:request method="GET" doc:name="Request to sys api" doc:id="e27a953b-f28a-477e-a0c0-57022399fd46" url="http://localhost:8083/sapi" />
+		<raise-error doc:name="Raise error" doc:id="b1560b25-be52-40c9-ad9f-c11bd799ce59" type="ABC_XYZ:SAMPLE" description="Some Error in PAPI" />
+	
+</flow>
+</mule>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bdc45a43-083e-4b5f-92d4-23a762808b9c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<configuration doc:name="Configuration" doc:id="ba3d4a7d-31b0-4803-943d-aa3ebb7808f9" defaultErrorHandler-ref="global_error_handlerError" />
+	<flow name="sample-exp-apiFlow" doc:id="8aa2940a-66c4-4b60-92fe-1815e130152a" >
+		<http:listener doc:name="Listener" doc:id="f680b55c-c8b0-43cc-bb5f-0d0051bd69db" config-ref="HTTP_Listener_config" path="/exp">
+			<http:error-response >
+				<http:body ><![CDATA[#[output application/json --- payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<http:request method="GET" doc:name="Request to process api" doc:id="b4880bce-b28c-4235-acd9-9bbbaafb278c" url="http://localhost:8082/papi"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c87a12ce-bd2c-4877-ac98-e4f1b379ecc4" />
+	</flow>
+</mule>
